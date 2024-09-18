@@ -107,3 +107,10 @@ function reduzirStr($str,$quantidade){
       );
       return $listaNoticia;
   }
+  function calcularImc($peso, $altura){
+    $resposta = 0;
+    if($peso && $altura){
+        $resposta = $peso / ($altura * $altura);
+    }
+    return $resposta;
+  }
