@@ -1,11 +1,17 @@
 <?php
+  $nome= ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['nome'])) ? $_POST['nome'] : null;
+  $email = ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['email'])) ? $_POST['email'] : null;
   $peso = ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['peso'])) ? $_POST['peso'] : null;
   $altura = ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['altura'])) ? $_POST['altura'] : null;
   $resposta = 0;
 
+
   include_once("configuracao.php");
+  include_once("configuracao/conexao.php");
   include_once("funcoes.php");
   $resposta = calcularImc($peso, $altura);
+  $classificacao = classificarImc($resposta);
+  cadastrar($nome,$email,$peso,$altura,$resposta,$classificacao);
   timeZone();
   $data = dataAtual();
   $tituloDoSite = "BEM VINDO A INFOSPORTS!";
