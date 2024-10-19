@@ -112,7 +112,7 @@ function reduzirStr($str,$quantidade){
     if($peso && $altura){
         $resposta = $peso / ($altura * $altura);
     }
-    return $resposta;
+    return round ($resposta,2);
 
   }
 function imcBuscarPorId($id)
@@ -141,6 +141,37 @@ function cadastrar($nome,$email,$peso,$altura,$imc,$classificacao)
       return ($result)?true:false;
   }
 
+function registro($nome,$email,$telefone,$login,$senha)
+{
+    
+    if( !$nome || !$email|| !$telefone){return;}
+    $sql = "INSERT INTO `registro`(`nome`, `email`, `telefone`, `login`, `senha`) VALUES(:nome, :email, :telefone, :login, :senha)";
+    $pdo = Database::conexao();
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':nome', $nome);
+    $stmt->bindParam(':email', $email);
+    $stmt->bindParam(':telefone', $telefone);
+    $stmt->bindParam(':login', $login);
+    $stmt->bindParam(':senha', $senha);
+    $result = $stmt->execute();
+    return ($result)?true:false;
+}
+
+function contato($nome,$sobrenome,$email,$telefone,$mensagem)
+{
+    if( !$nome || !$sobrenome || !$email|| !$telefone || !$mensagem){return;}
+    $sql = "INSERT INTO `contato` (`nome`, `sobrenome`, `email`, `telefone`, `mensagem`) VALUES(:nome, :sobrenome, :email, :telefone, :mensagem)";
+    $pdo = Database::conexao();
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':nome', $nome);
+    $stmt->bindparam(':sobrenome' , $sobrenome);
+    $stmt->bindParam(':email' , $email);
+    $stmt->bindParam(':telefone' , $telefone);
+    $stmt->bindParam(':mensagem' , $mensagem);
+    $result = $stmt->execute();
+    return ($result)?true:false;
+}
+
 function classificarImc($imc){
   if($imc <= 16){
       return "magreza grave;";
@@ -161,4 +192,71 @@ function classificarImc($imc){
   }elseif($imc >= 40){
       return "Obesidade grau 3 ou morbida";
   }
+}
+
+function criptografia($senha){
+    if(!$senha)return false;
+    return sha1($senha);
+}
+
+function criarNoticia($titulo,$descricaoCurta,$descricao,$img,$href)
+  {
+      if( !$titulo || !$descricaoCurta || !$descricao || !$img || !$href){return;}
+      $sql = "INSERT INTO `noticia` (`titulo`,`descricaoCurta`,`descricao`,`img`,`href`)
+      VALUES(:titulo,:descricaoCurta,:descricao,:img,:href)";
+      $pdo = Database::conexao();
+      $stmt = $pdo->prepare($sql);
+      $stmt->bindParam(':titulo', $titulo);
+      $stmt->bindParam(':descricaoCurta', $descricaoCurta);
+      $stmt->bindParam(':descricao', $descricao);
+      $stmt->bindParam(':img', $img);
+      $stmt->bindParam(':href', $href);
+      $result = $stmt->execute();
+      return ($result)?true:false;
+  }
+
+  function listarNoticias(){
+    $pdo = Database::conexao();
+    $sql = "SELECT * FROM noticia";
+    $stmt = $pdo->prepare($sql);
+    $list = $stmt->execute();
+    $list = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $list;
+  }
+
+function verificarLogin($login){
+    $pdo = Database::conexao();
+    $sql = "SELECT `id` , `login`, `senha` FROM registro WHERE `login`= '$login'";
+    $stmt = $pdo->prepare($sql);
+    $list = $stmt->execute();
+    $list = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $list[0];
+}
+
+function validaSenha($senhaDigitada, $senhaBd){
+    if(!$senhaDigitada || !$senhaBd){return false;}
+    if(!$senhaDigitada == $senhaBd){return true;}
+    return false;
+}
+
+
+function protegerTela(){
+    if(
+        !$_SESSION || 
+        !$_SESSION["usuario"]["status"] === 'logado'
+    ){
+        header('Location:'.constant("URL_LOCAL_SITE_PAGINA_LOGIN"));
+    }
+}
+
+function registrarAcessoValido($usuarioCadastrado){
+    $_SESSION["usuario"]["nome"] = $usuarioCadastrado['nome'];
+    $_SESSION["usuario"]["id"] = $usuarioCadastrado['id'];
+    $_SESSION["usuario"]["status"] = 'logado';
+    var_dump($usuarioCadastrado);die;
+}
+
+function limparSessao(){
+    unset($_SESSION["usuario"]);
+    header('location:'.constant("URL_LOCAL_SITE_PAGINA_LOGIN"));
 }

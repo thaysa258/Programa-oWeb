@@ -1,3 +1,9 @@
+<?php
+  include_once("configuracao/conexao.php");
+  include_once("funcoes.php");
+  registro($nome,$email,$telefone, $login, $senha);
+  ?>
+
 <div class="container">
     <header class="header">
       <a class="logo" href="index.html">InfoSports</a>
@@ -21,7 +27,7 @@
     </header>
     <section class="main">
       <div class="box-content">
-        <form action="">
+        <form action="#" method="post">
           <h1>Cadastre-se para acompanhar as notícias!</h1>
           <div class="name">
             <label for="nome"></label>
@@ -38,8 +44,17 @@
             <input type="text" placeholder="Telefone" id="telefone" name="telefone">
             <p id="tel-ajuda" class="msg-ajuda" style="display:none;">Insira um telefone válido. (11 números)</p>
           </div>
-          <button class="btn-concluir">Concluir</button>
-
+          <div class="telefone">
+            <label for="login"></label>
+            <input type="text" placeholder="login" id="login" name="login">
+            <p id="tel-ajuda" class="msg-ajuda" style="display:none;">Insira um login válido.</p>
+      
+          </div>
+          <div class="telefone">
+            <label for="senha"></label>
+            <input type="password" placeholder="senha" id="senha" name="senha">
+            <p id="tel-ajuda" class="msg-ajuda" style="display:none;">Insira uma senha válida.</p>
+          <button type="submit" class="btn-concluir">Concluir</button>
         </form>
       </div>
     </section>

@@ -1,3 +1,16 @@
+<?php
+  $nome= ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['nome'])) ? $_POST['nome'] : null;
+  $sobrenome= ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['sobrenome'])) ? $_POST['sobrenome'] : null;
+  $email = ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['email'])) ? $_POST['email'] : null;
+  $telefone = ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['telefone'])) ? $_POST['telefone'] : null;
+  $mensagem = ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['mensagem'])) ? $_POST['mensagem'] : null;
+
+  include_once("configuracao/conexao.php");
+  include_once("funcoes.php");
+  contato($nome,$sobrenome,$email,$telefone,$mensagem);
+  ?>
+
+
 <div class="body-bg">
         <header class="header">
             <a class="logo" href="index.html">InfoSports</a>
@@ -25,7 +38,7 @@
                     <h2>Contate-nos</h2>
                 </div>
 
-                <form action="contato.html">
+                <form action="#" method="post">
 
                     <div class="campos">
                         <div class="input-box">
@@ -37,7 +50,7 @@
                         </div>
 
                         <div class="input-box">
-                            <input type="text" id="sobrenome" placeholder="Sobrenome">
+                            <input type="text" id="sobrenome" placeholder="Sobrenome" name="sobrenome">
                         </div>
 
                         <div class="input-box">
@@ -57,13 +70,13 @@
                         </div>
 
                         <div class="input-box">
-                            <textarea id="mensagem" placeholder="Digite aqui sua mensagem"></textarea>
+                            <textarea id="mensagem" placeholder="Digite aqui sua mensagem" name= "mensagem"></textarea>
                         </div>
 
                     </div>
 
                     <div class="button">
-                        <button value="Enviar" class="btn-concluir" id="btnEnviar">Enviar</button>
+                        <button type="submit" value="Enviar" class="btn-concluir" id="btnEnviar">Enviar</button>
                     </div>
                 </form>
             </div>

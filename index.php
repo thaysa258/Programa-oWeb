@@ -1,15 +1,18 @@
 <?php
+include_once("configuracao.php");
+include_once("configuracao/conexao.php");
+include_once("funcoes.php");
+
   $nome= ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['nome'])) ? $_POST['nome'] : null;
   $email = ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['email'])) ? $_POST['email'] : null;
   $peso = ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['peso'])) ? $_POST['peso'] : null;
   $altura = ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['altura'])) ? $_POST['altura'] : null;
+  $login = ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['login'])) ? $_POST['login'] : null;
+  $senha = ($_SERVER["REQUEST_METHOD"] == "POST"&& !empty(criptografia($_POST['senha']))) ? criptografia($_POST['senha']) : null;
+  $telefone = ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['telefone'])) ? $_POST['telefone'] : null;
   $resposta = 0;
-
-
-  include_once("configuracao.php");
-  include_once("configuracao/conexao.php");
-  include_once("funcoes.php");
-  $resposta = calcularImc($peso, $altura);
+  
+  $resposta = calcularImc($peso, $login);
   $classificacao = classificarImc($resposta);
   cadastrar($nome,$email,$peso,$altura,$resposta,$classificacao);
   timeZone();
@@ -31,11 +34,20 @@ include_once("header.php");
     include_once("contato.php");
   }elseif($paginaUrl === "login"){
     include_once("login.php");
+    $usuarioCadastrado = verificarLogin($login);
+    var_dump($usuarioCadastrado);die;
+    if(
+      $usuarioCadastrado &&
+      validaSenha($senha, $usuarioCadastrado['senha'])
+    ){
+        registrarAcessoValido($usuarioCadastrado);
+  }
   }elseif($paginaUrl === "registro"){
     include_once("registro.php");
-  }else{
-    echo "404 Página não existe!";
-  }
+  }elseif($paginaUrl === "noticia"){
+    protegerTela();
+    include_once("criarnoticia.php");   
+  }elseif($paginaUrl === "sair"){
+  limparSessao();
+}
 
-include_once("footer.php");
-?>

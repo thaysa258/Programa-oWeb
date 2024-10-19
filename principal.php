@@ -25,14 +25,14 @@
     <section class="gridContainer">
       <div class="mainContent">
         <?php 
-        $listaNoticia = criarLista();
-        foreach($listaNoticia as $noticia):
+       
+        foreach(listarNoticias() as $noticia):
         ?>
-        <a class="pag-link" href="boxe.html">
+        <a class="pag-link" href="<?=$noticia["href"]?>">
           <div class="categoryCard">
-            <img src="<?=$noticia['imagem']?>" alt="mainCardImg" class="mainCardImg" width=320px height=180px>
+            <img src="<?=$noticia['img']?>" alt="mainCardImg" class="mainCardImg" width=320px height=180px>
             <p class="mainCategoryCardTitle"><?=$noticia['titulo']?></p>
-            <p class="mainCategoryCardDescription"><?= reduzirStr($noticia['descricao'],180)?></p>
+            <p class="mainCategoryCardDescription"><?= reduzirStr($noticia['descricaocurta'],180)?></p>
           </div>
         </a>
         <?php endforeach?>
